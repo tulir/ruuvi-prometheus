@@ -108,6 +108,7 @@ func init() {
 }
 
 func ObserveRuuvi(o RuuviReading) {
+	ObserveRaw(o)
 	addr := o.Address.String()
 
 	mu.Lock()
@@ -176,6 +177,7 @@ func clearExpired() {
 type RuuviReading struct {
 	*host.ScanReport
 	*ruuvi.Data
+	Raw []byte
 }
 
 // DataFormat guesses the Ruuvi protocol data format version. In case of

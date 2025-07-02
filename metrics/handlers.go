@@ -25,6 +25,7 @@
 package metrics
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -33,8 +34,9 @@ import (
 var Handler = http.NewServeMux()
 
 func init() {
-	Handler.HandleFunc("/", handleRoot)
+	Handler.HandleFunc("GET /history", ruuviGatewayHandler)
 	Handler.Handle("/metrics", promhttp.Handler())
+	Handler.HandleFunc("/", handleRoot)
 }
 
 const rootContent = `ruuvi-prometheus exporter
@@ -42,10 +44,12 @@ https://github.com/joneskoo/ruuvi-prometheus
 
 /                This page
 /metrics         Prometheus metrics endpoint
+/history         Fake Ruuvi gateway history endpoint
 `
 
 func handleRoot(w http.ResponseWriter, r *http.Request) {
 	if r.RequestURI != "/" {
+		log.Println("Unrecognized request:", r.RequestURI)
 		http.NotFound(w, r)
 		return
 	}

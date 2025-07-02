@@ -35,6 +35,7 @@ type settings struct {
 	device string
 	debug  bool
 	listen string
+	mac    string
 }
 
 func parseSettings() (cmdline settings) {
@@ -44,6 +45,7 @@ func parseSettings() (cmdline settings) {
 	flag.Var(device, "device", "HCI device to use")
 	flag.BoolVar(&cmdline.debug, "debug", false, "Debug output")
 	flag.StringVar(&cmdline.listen, "listen", defaultListen, "Listen address for Prometheus metrics")
+	flag.StringVar(&cmdline.mac, "mac", "", "MAC address of the fake gateway")
 	flag.Parse()
 	if *versionFlag {
 		printVersion()

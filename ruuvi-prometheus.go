@@ -35,10 +35,11 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/joneskoo/ruuvi-prometheus/bluetooth"
-	"github.com/joneskoo/ruuvi-prometheus/metrics"
 	"gitlab.com/jtaimisto/bluewalker/host"
 	"gitlab.com/jtaimisto/bluewalker/ruuvi"
+
+	"github.com/joneskoo/ruuvi-prometheus/bluetooth"
+	"github.com/joneskoo/ruuvi-prometheus/metrics"
 )
 
 const (
@@ -54,6 +55,7 @@ var version = ""
 
 func main() {
 	cmdline := parseSettings()
+	metrics.GatewayMAC = cmdline.mac
 
 	log.Printf("%s %s listening on %v", commandName, version, cmdline.listen)
 
@@ -125,7 +127,7 @@ func handleRuuviAdvertisement(sr *host.ScanReport) {
 			continue
 		}
 
-		reading := metrics.RuuviReading{ScanReport: sr, Data: ruuviData}
+		reading := metrics.RuuviReading{ScanReport: sr, Data: ruuviData, Raw: ads.Data}
 		metrics.ObserveRuuvi(reading)
 	}
 }
