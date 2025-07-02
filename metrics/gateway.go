@@ -33,7 +33,8 @@ func ObserveRaw(o RuuviReading) {
 	data[strings.ToUpper(o.Address.String())] = GatewayTagData{
 		RSSI:      o.Rssi,
 		Timestamp: time.Now().Unix(),
-		Data:      strings.ToUpper(hex.EncodeToString(o.Raw)),
+		// TODO don't hardcode the prefix
+		Data: "0201061BFF" + strings.ToUpper(hex.EncodeToString(o.Raw)),
 	}
 }
 
